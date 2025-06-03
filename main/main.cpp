@@ -3,7 +3,9 @@
 #include "init.hpp"
 
 int main(){
-    mainInit();
+    Initialization InitializationObj;
+    
+    InitializationObj.mainInit();
 
     return 0;
 }
