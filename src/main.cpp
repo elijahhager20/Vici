@@ -1,5 +1,9 @@
 // Version 0.0.1
 
+/* Vici, the worst
+version control system
+known to man */
+
 #include "init.hpp"
 
 int main(){
