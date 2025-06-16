@@ -6,6 +6,7 @@
             "label": "C/C++: g++.exe build active file",
             "command": "C:\\msys64\\ucrt64\\bin\\g++.exe",
             "args": [
+                "-std=c++23",
                 "-static",
                 "-fdiagnostics-color=always",
                 "main.cpp",
