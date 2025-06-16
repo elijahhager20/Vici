@@ -1,4 +1,4 @@
-Vici is a version control system that I, Elijah Aaron developed
+Vici is a version control system.
 
 It sucks.
 
