@@ -9,6 +9,5 @@ class Init{
 
 class createRepos{
     public:
-        static void loadRepos();
         static void createFirstRepo();
 };

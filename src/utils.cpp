@@ -10,3 +10,16 @@ void InitUtils::listDirectoryContents(const std::filesystem::path& path){
         }
     }
 }
+
+void InitUtils::loadRepos(){
+    std::filesystem::path repoName;
+    std::filesystem::path currRepo;
+    std::string repoNameStr;
+
+    std::cout << "Which repo would you like to load?: ";
+    std::getline(std::cin, repoNameStr);
+    repoName = repoNameStr + ".curr";
+    currRepo = repoName;
+
+    InitUtils::listDirectoryContents("user_repos"/currRepo);
+}

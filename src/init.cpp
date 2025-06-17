@@ -16,7 +16,7 @@ void Init::mainInit(){
     if (!std::filesystem::exists("sys_info")){
         Init::firstTimeInit();
     } else{
-        createRepos::loadRepos();
+        InitUtils::loadRepos();
     }
 }
     
@@ -32,19 +32,6 @@ void Init::firstTimeInit(){
         std::cout << '\n';
         createRepos::createFirstRepo();
     }
-}
-
-void createRepos::loadRepos(){
-    std::filesystem::path repoName;
-    std::filesystem::path currRepo;
-    std::string repoNameStr;
-
-    std::cout << "Which repo would you like to load?: ";
-    std::getline(std::cin, repoNameStr);
-    repoName = repoNameStr + ".curr";
-    currRepo = repoName;
-
-    InitUtils::listDirectoryContents("user_repos"/currRepo);
 }
 
 void createRepos::createFirstRepo(){
