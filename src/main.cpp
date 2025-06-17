@@ -17,6 +17,7 @@ int main(){
 }
 
 /*
-you_suck7, elijahhager20, &
-hawkpier30 were here
+you_suck7, elijahhager20, hawkpier30,
+& trollface. were 
+here
 */
