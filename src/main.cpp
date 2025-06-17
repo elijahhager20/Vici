@@ -13,7 +13,7 @@ int main(){
     
     InitializationObj.mainInit();
     
-    return 0; // We don't shutdown. We transcend
+    return 0; // We don't shutdown. We transcend.
 }
 
 /*
