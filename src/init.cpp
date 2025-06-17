@@ -1,3 +1,9 @@
+/*
+Javascript warrior at day
+
+C++ god at night
+*/
+
 #include "init.hpp"
 #include <iostream>
 #include <filesystem>
