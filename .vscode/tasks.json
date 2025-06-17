@@ -14,7 +14,7 @@
                 "utils.cpp",
                 "ver_ctrl.cpp",
                 "-o",
-                "${workspaceFolder}\\bin\\vici.exe"
+                "${workspaceFolder}\\bin\\viciw.exe"
             ],
             "options": {
                 "cwd": "${fileDirname}"

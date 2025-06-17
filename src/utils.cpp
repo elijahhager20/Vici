@@ -23,3 +23,7 @@ void InitUtils::loadRepos(){
 
     InitUtils::listDirectoryContents("user_repos"/currRepo);
 }
+
+void loopUtils::initLoop(){
+    
+}

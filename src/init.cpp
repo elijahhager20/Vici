@@ -16,7 +16,7 @@ void Init::mainInit(){
     if (!std::filesystem::exists("sys_info")){
         Init::firstTimeInit();
     } else{
-        InitUtils::loadRepos();
+        loopUtils::initLoop();
     }
 }
     
@@ -31,6 +31,8 @@ void Init::firstTimeInit(){
     } else if (userInput == "Create Repository" || userInput == "create repository" || userInput == "create Repository" || userInput == "Create repository"){
         std::cout << '\n';
         createRepos::createFirstRepo();
+    } else{
+        return;
     }
 }
 
