@@ -18,6 +18,6 @@ int main(){
 
 /*
 you_suck7, elijahhager20, hawkpier30,
-& trollface. were 
+& trollface. were
 here
 */
