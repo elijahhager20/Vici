@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include "ver_ctrl.hpp"
+#include <cstdlib>
 
 std::vector<std::string> splitArgs(const std::string& input) {
     std::istringstream iss(input);
@@ -62,9 +63,9 @@ bool loopUtils::logic(std::string& in){
     if (args[0] == "exit") {
         return false;
     }
-    if (args[0] == "-cr") {
+    if (args[0] == "cr") {
         if (args.size() < 2) {
-            std::cout << "Usage: -cr <repo_name>\n";
+            std::cout << "Usage: cr <repo_name>\n";
         } else {
             std::string repoName = args[1];
             std::filesystem::path repoPath = std::filesystem::path("user_repos") / (repoName + ".curr");
@@ -77,9 +78,9 @@ bool loopUtils::logic(std::string& in){
         }
         return true;
     }
-    if (args[0] == "-new") {
+    if (args[0] == "new") {
         if (args.size() < 2) {
-            std::cout << "Usage: -new <repo_name>\n";
+            std::cout << "Usage: new <repo_name>\n";
         } else {
             std::string repoName = args[1];
             std::filesystem::path repoPath = std::filesystem::path("user_repos") / (repoName + ".curr");
@@ -102,9 +103,9 @@ bool loopUtils::logic(std::string& in){
         }
         return true;
     }
-    if (args[0] == "-commit") {
+    if (args[0] == "commit") {
         if (currentRepo.empty()) {
-            std::cout << "No repository selected. Use -cr <repo_name> to select a repository.\n";
+            std::cout << "No repository selected. Use cr <repo_name> to select a repository.\n";
         } else {
             std::string message;
             if (args.size() > 1) {
@@ -118,7 +119,7 @@ bool loopUtils::logic(std::string& in){
         }
         return true;
     }
-    if (args[0] == "-log") {
+    if (args[0] == "log") {
         if (currentRepo.empty()) {
             std::cout << "No repository selected.\n";
         } else {
@@ -137,7 +138,7 @@ bool loopUtils::logic(std::string& in){
         }
         return true;
     }
-    if (args[0] == "-checkout") {
+    if (args[0] == "checkout") {
         if (currentRepo.empty()) {
             std::cout << "No repository selected.\n";
         } else if (args.size() < 2) {
@@ -151,7 +152,7 @@ bool loopUtils::logic(std::string& in){
         }
         return true;
     }
-    if (args[0] == "-delrepo") {
+    if (args[0] == "delrepo") {
         if (args.size() < 2) {
             std::cout << "Usage: -delrepo <repo_name>\n";
         } else {
@@ -164,7 +165,7 @@ bool loopUtils::logic(std::string& in){
         }
         return true;
     }
-    if (args[0] == "-delver") {
+    if (args[0] == "delver") {
         if (currentRepo.empty()) {
             std::cout << "No repository selected.\n";
         } else if (args.size() < 2) {
@@ -178,7 +179,7 @@ bool loopUtils::logic(std::string& in){
         }
         return true;
     }
-    if (args[0] == "-status") {
+    if (args[0] == "status") {
         if (currentRepo.empty()) {
             std::cout << "No repository selected.\n";
         } else {
@@ -192,23 +193,23 @@ bool loopUtils::logic(std::string& in){
         }
         return true;
     }
-    if (args[0] == "-help") {
+    if (args[0] == "help") {
         std::cout <<
             "Commands:\n"
-            "  -new <repo_name>         Create a new repository\n"
-            "  -cr <repo_name>          Change/select repository\n"
-            "  -commit [msg]            Commit current state with optional message\n"
-            "  -log                     List all commits for current repo\n"
-            "  -checkout <version>      Restore repo to a previous version\n"
-            "  -delrepo <repo_name>     Delete a repository and its versions\n"
-            "  -delver <version>        Delete a specific version from current repo\n"
-            "  -status                  Show current repo and latest commit\n"
-            "  -ls                      List files in the current repo's .curr folder\n"
-            "  -help                    Show this help message\n"
+            "  new <repo_name>         Create a new repository\n"
+            "  cr <repo_name>          Change/select repository\n"
+            "  commit [msg]            Commit current state with optional message\n"
+            "  log                     List all commits for current repo\n"
+            "  checkout <version>      Restore repo to a previous version\n"
+            "  delrepo <repo_name>     Delete a repository and its versions\n"
+            "  delver <version>        Delete a specific version from current repo\n"
+            "  status                  Show current repo and latest commit\n"
+            "  ls                      List files in the current repo's .curr folder\n"
+            "  help                    Show this help message\n"
             "  exit                     Exit the program\n";
         return true;
     }
-    if (args[0] == "-ls") {
+    if (args[0] == "ls") {
         if (currentRepo.empty()) {
             std::cout << "No repository selected.\n";
         } else {
@@ -220,6 +221,10 @@ bool loopUtils::logic(std::string& in){
                 InitUtils::listDirectoryContents(repoPath);
             }
         }
+        return true;
+    }
+    if (args[0] == "cls"){
+        system("cls");
         return true;
     }
 
