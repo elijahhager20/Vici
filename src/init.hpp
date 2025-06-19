@@ -4,10 +4,4 @@
 class Init{
     public:
         static void mainInit();
-        static void firstTimeInit();
-};
-
-class createRepos{
-    public:
-        static void createFirstRepo();
 };
