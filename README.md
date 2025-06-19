@@ -1,7 +1,6 @@
 # Vici
 
 Vici, the one and only worst version control system known to man.
-## Questions
 
 ## Who is it made/designed for?
 
