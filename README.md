@@ -28,7 +28,7 @@ As of now, there are no built in ways of adding, removing, or editing files. So 
 
 I probaly will add some basic commands to add and remove files, so don't worry.
 
-Oh, and help will show you all the commands but here they are anyways:
+Oh, and the -help command will show you all the commands but here they are anyways:
 
 ## Commands
 
