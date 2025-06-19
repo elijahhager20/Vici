@@ -46,7 +46,7 @@ std::string& loopUtils::getCurrentRepo() {
 void loopUtils::Loop(){
     std::string currIn;
     while(true){
-        std::cout << "@viciw.exe: ";
+        std::cout << '@' << currentRepo << ": ";
         std::getline(std::cin, currIn);
         if (!loopUtils::logic(currIn)) {
             break;
