@@ -106,10 +106,118 @@ bool loopUtils::logic(std::string& in){
         if (currentRepo.empty()) {
             std::cout << "No repository selected. Use -cr <repo_name> to select a repository.\n";
         } else {
-            if (VersionControl::commit(currentRepo)) {
+            std::string message;
+            if (args.size() > 1) {
+                message = in.substr(in.find(args[1]));
+            }
+            if (VersionControl::commit(currentRepo, message)) {
                 std::cout << "Committed current state of '" << currentRepo << "'.\n";
             } else {
                 std::cout << "Commit failed.\n";
+            }
+        }
+        return true;
+    }
+    if (args[0] == "-log") {
+        if (currentRepo.empty()) {
+            std::cout << "No repository selected.\n";
+        } else {
+            auto versions = VersionControl::listVersions(currentRepo);
+            if (versions.empty()) {
+                std::cout << "No commits found.\n";
+            } else {
+                std::cout << "Commits for '" << currentRepo << "':\n";
+                for (const auto& v : versions) {
+                    std::cout << v;
+                    std::string msg = VersionControl::getCommitMessage(currentRepo, v);
+                    if (!msg.empty()) std::cout << " - " << msg;
+                    std::cout << "\n";
+                }
+            }
+        }
+        return true;
+    }
+    if (args[0] == "-checkout") {
+        if (currentRepo.empty()) {
+            std::cout << "No repository selected.\n";
+        } else if (args.size() < 2) {
+            std::cout << "Usage: -checkout <version>\n";
+        } else {
+            if (VersionControl::checkout(currentRepo, args[1])) {
+                std::cout << "Checked out version " << args[1] << " to '" << currentRepo << ".curr'.\n";
+            } else {
+                std::cout << "Checkout failed.\n";
+            }
+        }
+        return true;
+    }
+    if (args[0] == "-delrepo") {
+        if (args.size() < 2) {
+            std::cout << "Usage: -delrepo <repo_name>\n";
+        } else {
+            if (VersionControl::deleteRepo(args[1])) {
+                std::cout << "Repository '" << args[1] << "' deleted.\n";
+                if (currentRepo == args[1]) currentRepo.clear();
+            } else {
+                std::cout << "Failed to delete repository.\n";
+            }
+        }
+        return true;
+    }
+    if (args[0] == "-delver") {
+        if (currentRepo.empty()) {
+            std::cout << "No repository selected.\n";
+        } else if (args.size() < 2) {
+            std::cout << "Usage: -delver <version>\n";
+        } else {
+            if (VersionControl::deleteVersion(currentRepo, args[1])) {
+                std::cout << "Version '" << args[1] << "' deleted.\n";
+            } else {
+                std::cout << "Failed to delete version.\n";
+            }
+        }
+        return true;
+    }
+    if (args[0] == "-status") {
+        if (currentRepo.empty()) {
+            std::cout << "No repository selected.\n";
+        } else {
+            std::cout << "Current repo: " << currentRepo << "\n";
+            std::string latest = VersionControl::getLatestVersion(currentRepo);
+            if (!latest.empty()) {
+                std::cout << "Latest commit: " << latest << "\n";
+            } else {
+                std::cout << "No commits yet.\n";
+            }
+        }
+        return true;
+    }
+    if (args[0] == "-help") {
+        std::cout <<
+            "Commands:\n"
+            "  -new <repo_name>         Create a new repository\n"
+            "  -cr <repo_name>          Change/select repository\n"
+            "  -commit [msg]            Commit current state with optional message\n"
+            "  -log                     List all commits for current repo\n"
+            "  -checkout <version>      Restore repo to a previous version\n"
+            "  -delrepo <repo_name>     Delete a repository and its versions\n"
+            "  -delver <version>        Delete a specific version from current repo\n"
+            "  -status                  Show current repo and latest commit\n"
+            "  -ls                      List files in the current repo's .curr folder\n"
+            "  -help                    Show this help message\n"
+            "  exit                     Exit the program\n";
+        return true;
+    }
+    if (args[0] == "-ls") {
+        if (currentRepo.empty()) {
+            std::cout << "No repository selected.\n";
+        } else {
+            std::filesystem::path repoPath = std::filesystem::path("user_repos") / (currentRepo + ".curr");
+            if (!std::filesystem::exists(repoPath) || !std::filesystem::is_directory(repoPath)) {
+                std::cout << "Current repo folder does not exist.\n";
+            } else {
+                std::cout << "Files in " << repoPath.string() << ":\n";
+                InitUtils::listDirectoryContents(repoPath);
             }
         }
         return true;
