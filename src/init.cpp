@@ -10,7 +10,7 @@ void Init::mainInit(){
     if (!std::filesystem::exists("sys_info")){
         Init::firstTimeInit();
     } else{
-        loopUtils::initLoop();
+        loopUtils::Loop();
     }
 }
     

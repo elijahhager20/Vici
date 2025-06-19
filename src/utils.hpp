@@ -1,4 +1,7 @@
 #pragma once
+#include <string>
+#include <filesystem>
+#include <vector>
 
 class InitUtils{
     public:
@@ -8,5 +11,6 @@ class InitUtils{
 
 class loopUtils{
     public:
-        static void initLoop();
+        static void Loop();
+        static bool logic(std::string& in);
 };
