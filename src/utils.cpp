@@ -142,7 +142,7 @@ bool loopUtils::logic(std::string& in){
         if (currentRepo.empty()) {
             std::cout << "No repository selected.\n";
         } else if (args.size() < 2) {
-            std::cout << "Usage: -checkout <version>\n";
+            std::cout << "Usage: checkout <version>\n";
         } else {
             if (VersionControl::checkout(currentRepo, args[1])) {
                 std::cout << "Checked out version " << args[1] << " to '" << currentRepo << ".curr'.\n";
@@ -154,7 +154,7 @@ bool loopUtils::logic(std::string& in){
     }
     if (args[0] == "delrepo") {
         if (args.size() < 2) {
-            std::cout << "Usage: -delrepo <repo_name>\n";
+            std::cout << "Usage: delrepo <repo_name>\n";
         } else {
             if (VersionControl::deleteRepo(args[1])) {
                 std::cout << "Repository '" << args[1] << "' deleted.\n";
@@ -169,7 +169,7 @@ bool loopUtils::logic(std::string& in){
         if (currentRepo.empty()) {
             std::cout << "No repository selected.\n";
         } else if (args.size() < 2) {
-            std::cout << "Usage: -delver <version>\n";
+            std::cout << "Usage: delver <version>\n";
         } else {
             if (VersionControl::deleteVersion(currentRepo, args[1])) {
                 std::cout << "Version '" << args[1] << "' deleted.\n";

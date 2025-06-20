@@ -28,28 +28,28 @@ As of now, there are no built in ways of adding, removing, or editing files. So 
 
 I probaly will add some basic commands to add and remove files, so don't worry.
 
-Oh, and the -help command will show you all the commands but here they are anyways:
+Oh, and the help command will show you all the commands but here they are anyways:
 
 ## Commands
 
--new <repo_name>         Create a new repository
+new <repo_name>         Create a new repository
 
--cr <repo_name>          Change/select repository\n
+cr <repo_name>          Change/select repository\n
 
--commit [msg]            Commit current state with optional message\n
+commit [msg]            Commit current state with optional message\n
 
--log                     List all commits for current repo\n
+log                     List all commits for current repo\n
 
--checkout <version>      Restore repo to a previous version\n
+checkout <version>      Restore repo to a previous version\n
 
--delrepo <repo_name>     Delete a repository and its versions\n
+delrepo <repo_name>     Delete a repository and its versions\n
 
--delver <version>        Delete a specific version from current repo\n
+delver <version>        Delete a specific version from current repo\n
 
--status                  Show current repo and latest commit\n
+status                  Show current repo and latest commit\n
 
--ls                      List files in the current repo's .curr folder\n
+ls                      List files in the current repo's .curr folder\n
 
--help                    Show this help message\n
+help                    Show this help message\n
 
 exit                     Exit the program\n
