@@ -52,4 +52,4 @@ ls                      List files in the current repo's .curr folder\n
 
 help                    Show this help message\n
 
-exit                     Exit the program\n
+exit                    Exit the program\n
