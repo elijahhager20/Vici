@@ -27,11 +27,8 @@ bool VersionControl::commit(const std::string& repoName, const std::string& mess
         auto now = std::chrono::system_clock::now();
         std::time_t now_c = std::chrono::system_clock::to_time_t(now);
         std::tm tm;
-    #ifdef _WIN32
         localtime_s(&tm, &now_c);
-    #else
-        localtime_r(&now_c, &tm);
-    #endif
+
         std::ostringstream oss;
         oss << std::put_time(&tm, "v_%Y%m%d_%H%M%S");
         std::string versionFolder = oss.str();
