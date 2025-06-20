@@ -1,11 +1,22 @@
-:: Warning: This script was written by a sleep-deprived genius. Run at your own risk.
-
 @echo off
-echo Use viciw.exe to ignore this message:
+
+set LOG="%~dp0batch-crash.log"
+
 echo Vici: the one and only worst version control system known to man.
-echo I salute you for even attempting to use this mashup of c++ header files I barely know how to use.
-echo Anyways, I hope you have fun using Vici as your version control system!
+echo I salute you for even attempting to use this mashup of C++ header files I barely know how to use.
 echo.
-echo -------------------------------------------------------------------------------------------------
-echo.
-viciw.exe
+
+if not exist "viciw.exe" (
+    echo [Error] viciw.exe not found. >> %LOG%
+    echo [%DATE% %TIME%] ERROR: viciw.exe missing >> %LOG%
+    echo Failed to launch Vici. See log: %LOG%
+    exit /b 1
+)
+
+:: Launch
+viciw.exe %*
+if errorlevel 9009 (
+    echo [%DATE% %TIME%] ERROR: Command or path not recognized >> %LOG%
+    echo [Error] viciw.exe launch failed — unknown command or missing path.
+    exit /b 1
+)
