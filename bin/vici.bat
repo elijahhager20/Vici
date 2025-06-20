@@ -12,11 +12,4 @@ if not exist "viciw.exe" (
     echo Failed to launch Vici. See log: %LOG%
     exit /b 1
 )
-
-:: Launch
 viciw.exe %*
-if errorlevel 9009 (
-    echo [%DATE% %TIME%] ERROR: Command or path not recognized >> %LOG%
-    echo [Error] viciw.exe launch failed — unknown command or missing path.
-    exit /b 1
-)
