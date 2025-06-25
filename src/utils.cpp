@@ -224,9 +224,13 @@ bool loopUtils::logic(std::string& in){
         return true;
     }
     if (args[0] == "cls"){
-        system("cls");
-        return true;
-    }
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+    return true;
+}
 
     std::cout << "Unknown command: " << args[0] << "\n";
     return true;

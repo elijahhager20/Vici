@@ -3,8 +3,8 @@
     "tasks": [
         {
             "type": "cppbuild",
-            "label": "C/C++: g++.exe build active file",
-            "command": "C:\\msys64\\ucrt64\\bin\\g++.exe", // Change to your path to g++
+            "label": "mingw64 g++",
+            "command": "g++", // Change to your path to g++ if not in PATH
             "args": [
                 "-std=c++23",
                 "-static",
@@ -30,3 +30,6 @@
         }
     ]
 }
+
+// Linux command:
+// g++ -std=c++23 -static -fdiagnostics-color=always main.cpp init.cpp utils.cpp ver_ctrl.cpp -o ./bin/vicil
