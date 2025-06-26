@@ -28,10 +28,6 @@ As of now, there are no built in ways of adding, removing, or editing files. So 
 
 I probaly will add some basic commands to add and remove files, so don't worry.
 
-Now, on Linux, all you must do is run the linux-vici-installer file located with the Vici binaries.
-However, if it denies access, add executable permissions to the installer by running "chmod +x linux-vici-installer".
-This software is mainly targeted for Windows, so you might experience issues when using Vici on Linux.
-
 Oh, and the help command will show you all the commands but here they are anyways:
 
 ## Commands
