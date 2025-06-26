@@ -58,7 +58,7 @@ bool loopUtils::logic(std::string& in){
     if (args[0] == "delrepo") return VersionControl::deleteRepoCmd(args, currentRepo);
     if (args[0] == "delver") return VersionControl::deleteVersionCmd(args, currentRepo);
     if (args[0] == "status") return VersionControl::statusRepo(currentRepo);
-    if (args[0] == "help") { VersionControl::help(); return true; }
+    if (args[0] == "help"){VersionControl::help(); return true;}
     if (args[0] == "ls") return VersionControl::listFiles(currentRepo);
     if (args[0] == "cls"){
 #ifdef _WIN32
