@@ -1,7 +1,9 @@
-#!/usr/bin/env bash
+#!/bin/sh
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 echo "Vici: the one and only worst version control system known to man."
 echo "I salute you for even attempting to use this mashup of C++ header files I barely know how to use."
 echo
 
-./vicil "$@"
+"$SCRIPT_DIR/vicil" "$@"
