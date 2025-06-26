@@ -20,13 +20,15 @@ I like the filesystem and fstream headers. And it was good practice for Object O
 
 ## Use
 
-You must add the folder containing viciw.exe and vici.bat to your PATH variables.
+You must add the folder containing viciw.exe and vici.bat to your PATH/$PATH (Depending on your platform).
 
 You'll probaly get errors if you delete any files or folders, so probaly don't touch those.
 
 As of now, there are no built in ways of adding, removing, or editing files. So I guess you'll have to just do it on your own. ¯\\_(ツ)_/¯
 
 I probaly will add some basic commands to add and remove files, so don't worry.
+
+Windows exclusive features will be mentioned in vici.bat, along with an editable motd!
 
 Oh, and the help command will show you all the commands but here they are anyways:
 
