@@ -59,4 +59,4 @@ Oh, and the help command will show you all the commands, but here they are anywa
 | `<file_name>`               | Ignores files with the same name in the root directory                             |
 | `<dir_name/>`               | Ignores folders with the same name in the root directory                           |
 | `<dir_name/*>`              | Ignores all files in that folder, but not the folder itself                        |
-| `<dir_name/file_name>`      | Ignores specific files or paths—subdirectories and nested paths also work normally |
+| `<dir_name/file_name>`      | Ignores specific files or paths, subdirectories will also work.
