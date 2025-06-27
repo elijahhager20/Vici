@@ -221,15 +221,18 @@ bool VersionControl::listFiles(const std::string& currentRepo) {
 
 void VersionControl::copyDirectory(const std::filesystem::path& source, const std::filesystem::path& destination, const std::vector<IgnoreRule>& ignoreRules) {
     std::filesystem::create_directories(destination);
-    for (const auto& entry : std::filesystem::recursive_directory_iterator(source)) {
-        auto relPath = std::filesystem::relative(entry.path(), source);
-        bool isDir = entry.is_directory();
-        if (ViciIgnore::isIgnored(ignoreRules, relPath, isDir) || relPath.filename() == ".viciignore") continue;
+    for (auto it = std::filesystem::recursive_directory_iterator(source); it != std::filesystem::recursive_directory_iterator(); ++it) {
+        auto relPath = std::filesystem::relative(it->path(), source);
+        bool isDir = it->is_directory();
+        if (ViciIgnore::isIgnored(ignoreRules, relPath, isDir) || relPath.filename() == ".viciignore") {
+            if (isDir) it.disable_recursion_pending();
+            continue;
+        }
         auto destPath = destination / relPath;
         if (isDir) {
             std::filesystem::create_directories(destPath);
-        } else if (entry.is_regular_file()) {
-            std::filesystem::copy_file(entry.path(), destPath, std::filesystem::copy_options::overwrite_existing);
+        } else if (it->is_regular_file()) {
+            std::filesystem::copy_file(it->path(), destPath, std::filesystem::copy_options::overwrite_existing);
         }
     }
 }
