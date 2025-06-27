@@ -59,6 +59,9 @@ exit                    Exit the program\n
 ## .viciignore syntax
 
 <file_name>             Ignores files with the same name in the root directory
+
 <dir_name/>             Ignores folders with the same name in the root directory
+
 <dir_name/*>            Ignores all the files in that folder, but not ignoring the folder itself
+
 <dir_name/file_name     You can continue this, just like normal file paths. Subddirectories also work.
