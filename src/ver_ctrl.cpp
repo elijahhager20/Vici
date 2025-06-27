@@ -10,22 +10,39 @@
 #include <iostream>
 #include <set>
 
-std::set<std::string> ViciIgnore::parse(const std::filesystem::path& repoPath) {
-    std::set<std::string> ignoreSet;
+std::vector<IgnoreRule> ViciIgnore::parse(const std::filesystem::path& repoPath) {
+    std::vector<IgnoreRule> rules;
     std::ifstream ignoreFile(repoPath / ".viciignore");
-    if (!ignoreFile) return ignoreSet;
+    if (!ignoreFile) return rules;
     std::string line;
     while (std::getline(ignoreFile, line)) {
         line.erase(0, line.find_first_not_of(" \t\r\n"));
         line.erase(line.find_last_not_of(" \t\r\n") + 1);
-        if (!line.empty()) ignoreSet.insert(line);
+        if (line.empty()) continue;
+        if (line.size() > 2 && line.substr(line.size() - 2) == "/*") {
+            rules.push_back({line.substr(0, line.size() - 2), IgnoreRule::Type::FolderFiles});
+        } else if (!line.empty() && line.back() == '/') {
+            rules.push_back({line.substr(0, line.size() - 1), IgnoreRule::Type::Folder});
+        } else {
+            rules.push_back({line, IgnoreRule::Type::File});
+        }
     }
-    return ignoreSet;
+    return rules;
 }
 
-bool ViciIgnore::isIgnored(const std::set<std::string>& ignoreSet, const std::filesystem::path& relPath) {
+bool ViciIgnore::isIgnored(const std::vector<IgnoreRule>& rules, const std::filesystem::path& relPath, bool isDir) {
     std::string relStr = relPath.generic_string();
-    return ignoreSet.count(relStr) || ignoreSet.count(relPath.filename().string());
+    for (const auto& rule : rules) {
+        if (rule.type == IgnoreRule::Type::File) {
+            if (relStr == rule.pattern || relPath.filename() == rule.pattern) return true;
+        } else if (rule.type == IgnoreRule::Type::Folder) {
+            if (relStr == rule.pattern || relStr.rfind(rule.pattern + "/", 0) == 0) return isDir;
+        } else if (rule.type == IgnoreRule::Type::FolderFiles) {
+            if (!isDir && relStr.rfind(rule.pattern + "/", 0) == 0 && relPath.parent_path().generic_string() == rule.pattern)
+                return true;
+        }
+    }
+    return false;
 }
 
 std::filesystem::path VersionControl::getRepoPath(const std::string& repoName) {
@@ -202,13 +219,14 @@ bool VersionControl::listFiles(const std::string& currentRepo) {
     return true;
 }
 
-void VersionControl::copyDirectory(const std::filesystem::path& source, const std::filesystem::path& destination, const std::set<std::string>& ignoreSet) {
+void VersionControl::copyDirectory(const std::filesystem::path& source, const std::filesystem::path& destination, const std::vector<IgnoreRule>& ignoreRules) {
     std::filesystem::create_directories(destination);
     for (const auto& entry : std::filesystem::recursive_directory_iterator(source)) {
         auto relPath = std::filesystem::relative(entry.path(), source);
-        if (ViciIgnore::isIgnored(ignoreSet, relPath) || relPath.filename() == ".viciignore") continue;
+        bool isDir = entry.is_directory();
+        if (ViciIgnore::isIgnored(ignoreRules, relPath, isDir) || relPath.filename() == ".viciignore") continue;
         auto destPath = destination / relPath;
-        if (entry.is_directory()) {
+        if (isDir) {
             std::filesystem::create_directories(destPath);
         } else if (entry.is_regular_file()) {
             std::filesystem::copy_file(entry.path(), destPath, std::filesystem::copy_options::overwrite_existing);
@@ -237,8 +255,8 @@ bool VersionControl::commit(const std::string& repoName, const std::string& mess
         if (!std::filesystem::exists(repoPath)) {
             return false;
         }
-        auto ignoreSet = ViciIgnore::parse(repoPath);
-        copyDirectory(repoPath, newVersionPath, ignoreSet);
+        auto ignoreRules = ViciIgnore::parse(repoPath);
+        copyDirectory(repoPath, newVersionPath, ignoreRules);
 
         if (!message.empty()) {
             std::ofstream msgFile(newVersionPath / "commit_message.txt");

@@ -4,10 +4,16 @@
 #include <filesystem>
 #include <set>
 
+struct IgnoreRule {
+    enum class Type { File, Folder, FolderFiles };
+    std::string pattern;
+    Type type;
+};
+
 class ViciIgnore {
 public:
-    static std::set<std::string> parse(const std::filesystem::path& repoPath);
-    static bool isIgnored(const std::set<std::string>& ignoreSet, const std::filesystem::path& relPath);
+    static std::vector<IgnoreRule> parse(const std::filesystem::path& repoPath);
+    static bool isIgnored(const std::vector<IgnoreRule>& rules, const std::filesystem::path& relPath, bool isDir);
 };
 
 class VersionControl {
@@ -39,5 +45,5 @@ public:
 private:
     static bool checkRepoSelected(const std::string& currentRepo);
     static bool checkArgsSize(const std::vector<std::string>& args, size_t minSize, const std::string& usage);
-    static void copyDirectory(const std::filesystem::path& source, const std::filesystem::path& destination, const std::set<std::string>& ignoreSet = {});
+    static void copyDirectory(const std::filesystem::path& source, const std::filesystem::path& destination, const std::vector<IgnoreRule>& ignoreRules = {});
 };
