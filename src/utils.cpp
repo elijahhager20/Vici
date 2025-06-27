@@ -1,6 +1,5 @@
 #include "utils.hpp"
 #include <filesystem>
-#include <fstream>
 #include <iostream>
 #include <sstream>
 #include "ver_ctrl.hpp"
@@ -29,22 +28,22 @@ namespace {
     std::string currentRepo = "";
 }
 
-std::string& loopUtils::getCurrentRepo() {
+std::string& LoopUtils::getCurrentRepo() {
     return currentRepo;
 }
 
-void loopUtils::Loop(){
+void LoopUtils::Loop(){
     std::string currIn;
     while(true){
         std::cout << '@' << currentRepo << ": ";
         std::getline(std::cin, currIn);
-        if (!loopUtils::logic(currIn)) {
+        if (!LoopUtils::logic(currIn)) {
             break;
         }
     }
 }
 
-bool loopUtils::logic(std::string& in){
+bool LoopUtils::logic(std::string& in){
     auto& currentRepo = getCurrentRepo();
     auto args = splitArgs(in);
     if (args.empty()) return true;

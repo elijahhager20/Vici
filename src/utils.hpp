@@ -6,10 +6,9 @@
 class InitUtils {
 public:
     static void listDirectoryContents(const std::filesystem::path& path);
-    static void loadRepos();
 };
 
-class loopUtils {
+class LoopUtils {
 public:
     static void Loop();
     static bool logic(std::string& in);

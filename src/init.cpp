@@ -8,5 +8,5 @@ void Init::mainInit() {
     if (!std::filesystem::exists("user_repos")) {
         std::filesystem::create_directory("user_repos");
     }
-    loopUtils::Loop();
+    LoopUtils::Loop();
 }

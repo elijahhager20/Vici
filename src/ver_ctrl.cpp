@@ -8,6 +8,25 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <set>
+
+std::set<std::string> ViciIgnore::parse(const std::filesystem::path& repoPath) {
+    std::set<std::string> ignoreSet;
+    std::ifstream ignoreFile(repoPath / ".viciignore");
+    if (!ignoreFile) return ignoreSet;
+    std::string line;
+    while (std::getline(ignoreFile, line)) {
+        line.erase(0, line.find_first_not_of(" \t\r\n"));
+        line.erase(line.find_last_not_of(" \t\r\n") + 1);
+        if (!line.empty()) ignoreSet.insert(line);
+    }
+    return ignoreSet;
+}
+
+bool ViciIgnore::isIgnored(const std::set<std::string>& ignoreSet, const std::filesystem::path& relPath) {
+    std::string relStr = relPath.generic_string();
+    return ignoreSet.count(relStr) || ignoreSet.count(relPath.filename().string());
+}
 
 std::filesystem::path VersionControl::getRepoPath(const std::string& repoName) {
     return std::filesystem::path("user_repos") / (repoName + ".curr");
@@ -183,17 +202,16 @@ bool VersionControl::listFiles(const std::string& currentRepo) {
     return true;
 }
 
-namespace {
-    void copyDirectory(const std::filesystem::path& source, const std::filesystem::path& destination) {
-        std::filesystem::create_directories(destination);
-        for (const auto& entry : std::filesystem::recursive_directory_iterator(source)) {
-            const auto& relPath = std::filesystem::relative(entry.path(), source);
-            const auto& destPath = destination / relPath;
-            if (entry.is_directory()) {
-                std::filesystem::create_directories(destPath);
-            } else if (entry.is_regular_file()) {
-                std::filesystem::copy_file(entry.path(), destPath, std::filesystem::copy_options::overwrite_existing);
-            }
+void VersionControl::copyDirectory(const std::filesystem::path& source, const std::filesystem::path& destination, const std::set<std::string>& ignoreSet) {
+    std::filesystem::create_directories(destination);
+    for (const auto& entry : std::filesystem::recursive_directory_iterator(source)) {
+        auto relPath = std::filesystem::relative(entry.path(), source);
+        if (ViciIgnore::isIgnored(ignoreSet, relPath) || relPath.filename() == ".viciignore") continue;
+        auto destPath = destination / relPath;
+        if (entry.is_directory()) {
+            std::filesystem::create_directories(destPath);
+        } else if (entry.is_regular_file()) {
+            std::filesystem::copy_file(entry.path(), destPath, std::filesystem::copy_options::overwrite_existing);
         }
     }
 }
@@ -219,7 +237,8 @@ bool VersionControl::commit(const std::string& repoName, const std::string& mess
         if (!std::filesystem::exists(repoPath)) {
             return false;
         }
-        copyDirectory(repoPath, newVersionPath);
+        auto ignoreSet = ViciIgnore::parse(repoPath);
+        copyDirectory(repoPath, newVersionPath, ignoreSet);
 
         if (!message.empty()) {
             std::ofstream msgFile(newVersionPath / "commit_message.txt");

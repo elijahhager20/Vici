@@ -2,6 +2,6 @@
 #include <filesystem>
 
 class Init{
-    public:
-        static void mainInit();
+public:
+    static void mainInit();
 };
