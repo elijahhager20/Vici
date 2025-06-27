@@ -20,48 +20,43 @@ I like the filesystem and fstream headers. And it was good practice for Object O
 
 ## Use
 
-You must add the folder containing viciw.exe and vici.bat to your PATH/$PATH (Depending on your platform).
+You must add the folder containing `viciw.exe` and `vici.bat` to your `PATH`/`$PATH` (depending on your platform).
 
-You'll probaly get errors if you delete any files or folders, so probaly don't touch those.
+You'll probably get errors if you delete any files or folders, so probably don't touch those.
 
-As of now, there are no built in ways of adding, removing, or editing files. So I guess you'll have to just do it on your own. ¯\\_(ツ)_/¯
+As of now, there are no built-in ways of adding, removing, or editing files. So I guess you'll have to just do it on your own. ¯\\_(ツ)_/¯
 
-I probaly will add some basic commands to add and remove files, so don't worry.
+I probably will add some basic commands to add and remove files, so don't worry.
 
-Windows exclusive features will be mentioned in vici.bat, along with an editable motd!
+Windows exclusive features will be mentioned in `vici.bat`, along with an editable motd!
 
-Oh, and the help command will show you all the commands but here they are anyways:
+Oh, and the help command will show you all the commands, but here they are anyways:
+
+---
 
 ## Commands
 
-new <repo_name>         Create a new repository
+| Command                       | Description                                        |
+|------------------------------|----------------------------------------------------|
+| `new <repo_name>`            | Create a new repository                            |
+| `cr <repo_name>`             | Change/select repository                           |
+| `commit [msg]`               | Commit current state with optional message         |
+| `log`                        | List all commits for current repo                  |
+| `checkout <version>`         | Restore repo to a previous version                 |
+| `delrepo <repo_name>`        | Delete a repository and its versions               |
+| `delver <version>`           | Delete a specific version from current repo        |
+| `status`                     | Show current repo and latest commit                |
+| `ls`                         | List files in the current repo's `.curr` folder    |
+| `help`                       | Show this help message                             |
+| `exit`                       | Exit the program                                   |
 
-cr <repo_name>          Change/select repository\n
+---
 
-commit [msg]            Commit current state with optional message\n
+## `.viciignore` Syntax
 
-log                     List all commits for current repo\n
-
-checkout <version>      Restore repo to a previous version\n
-
-delrepo <repo_name>     Delete a repository and its versions\n
-
-delver <version>        Delete a specific version from current repo\n
-
-status                  Show current repo and latest commit\n
-
-ls                      List files in the current repo's .curr folder\n
-
-help                    Show this help message\n
-
-exit                    Exit the program\n
-
-## .viciignore syntax
-
-<file_name>             Ignores files with the same name in the root directory
-
-<dir_name/>             Ignores folders with the same name in the root directory
-
-<dir_name/*>            Ignores all the files in that folder, but not ignoring the folder itself
-
-<dir_name/file_name     You can continue this, just like normal file paths. Subddirectories also work.
+| Pattern                      | Effect                                                                              |
+|-----------------------------|-------------------------------------------------------------------------------------|
+| `<file_name>`               | Ignores files with the same name in the root directory                             |
+| `<dir_name/>`               | Ignores folders with the same name in the root directory                           |
+| `<dir_name/*>`              | Ignores all files in that folder, but not the folder itself                        |
+| `<dir_name/file_name>`      | Ignores specific files or paths—subdirectories and nested paths also work normally |
