@@ -36,10 +36,9 @@ bool ViciIgnore::isIgnored(const std::vector<IgnoreRule>& rules, const std::file
         if (rule.type == IgnoreRule::Type::File) {
             if (relStr == rule.pattern || relPath.filename() == rule.pattern) return true;
         } else if (rule.type == IgnoreRule::Type::Folder) {
-            if (relStr == rule.pattern || relStr.rfind(rule.pattern + "/", 0) == 0) return isDir;
+            if (relStr == rule.pattern || relStr.rfind(rule.pattern + "/", 0) == 0) return true;
         } else if (rule.type == IgnoreRule::Type::FolderFiles) {
-            if (!isDir && relStr.rfind(rule.pattern + "/", 0) == 0 && relPath.parent_path().generic_string() == rule.pattern)
-                return true;
+            if (!isDir && relPath.parent_path().generic_string() == rule.pattern) return true;
         }
     }
     return false;
@@ -281,60 +280,67 @@ std::vector<std::string> VersionControl::listVersions(const std::string& repoNam
                 versions.push_back(entry.path().filename().string());
             }
         }
-        std::sort(versions.begin(), versions.end());
     }
+    std::sort(versions.begin(), versions.end(), std::greater<std::string>());
     return versions;
 }
 
 bool VersionControl::checkout(const std::string& repoName, const std::string& version) {
-    auto versionsPath = getVersionsPath(repoName) / version;
-    auto repoPath = getRepoPath(repoName);
-    if (!std::filesystem::exists(versionsPath) || !std::filesystem::is_directory(versionsPath)) {
+    try {
+        std::filesystem::path repoPath = getRepoPath(repoName);
+        std::filesystem::path versionsPath = getVersionsPath(repoName);
+        std::filesystem::path versionPath = versionsPath / version;
+
+        if (!std::filesystem::exists(versionPath)) {
+            return false;
+        }
+
+        auto ignoreRules = ViciIgnore::parse(repoPath);
+        copyDirectory(versionPath, repoPath, ignoreRules);
+        return true;
+    } catch (...) {
         return false;
     }
-    if (std::filesystem::exists(repoPath)) {
-        std::filesystem::remove_all(repoPath);
-    }
-    copyDirectory(versionsPath, repoPath);
-    return true;
 }
 
 bool VersionControl::deleteRepo(const std::string& repoName) {
-    auto repoPath = getRepoPath(repoName);
-    auto versionsPath = getVersionsPath(repoName);
-    bool ok = true;
-    if (std::filesystem::exists(repoPath)) {
-        ok &= std::filesystem::remove_all(repoPath) > 0;
+    try {
+        auto repoPath = getRepoPath(repoName);
+        auto versionsPath = getVersionsPath(repoName);
+        std::filesystem::remove_all(repoPath);
+        std::filesystem::remove_all(versionsPath);
+        return true;
+    } catch (...) {
+        return false;
     }
-    if (std::filesystem::exists(versionsPath)) {
-        ok &= std::filesystem::remove_all(versionsPath) > 0;
-    }
-    return ok;
 }
 
 bool VersionControl::deleteVersion(const std::string& repoName, const std::string& version) {
-    auto versionPath = getVersionsPath(repoName) / version;
-    if (std::filesystem::exists(versionPath)) {
-        return std::filesystem::remove_all(versionPath) > 0;
+    try {
+        auto versionPath = getVersionsPath(repoName) / version;
+        std::filesystem::remove_all(versionPath);
+        return true;
+    } catch (...) {
+        return false;
     }
-    return false;
 }
 
 std::string VersionControl::getLatestVersion(const std::string& repoName) {
     auto versions = listVersions(repoName);
     if (!versions.empty()) {
-        return versions.back();
+        return versions.front();
     }
-    return "";
+    return {};
 }
 
 std::string VersionControl::getCommitMessage(const std::string& repoName, const std::string& version) {
-    auto msgPath = getVersionsPath(repoName) / version / "commit_message.txt";
-    if (std::filesystem::exists(msgPath)) {
-        std::ifstream in(msgPath);
-        std::ostringstream ss;
-        ss << in.rdbuf();
-        return ss.str();
-    }
-    return "";
+    std::string message;
+    try {
+        auto msgFile = getVersionsPath(repoName) / version / "commit_message.txt";
+        if (std::filesystem::exists(msgFile)) {
+            std::ifstream file(msgFile);
+            std::getline(file, message);
+        }
+    } catch (...) {}
+    return message;
 }
