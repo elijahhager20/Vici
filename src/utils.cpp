@@ -34,9 +34,23 @@ std::string& LoopUtils::getCurrentRepo() {
 
 void LoopUtils::Loop(){
     std::string currIn;
+    std::string lastCmd;
     while(true){
         std::cout << '@' << currentRepo << ": ";
         std::getline(std::cin, currIn);
+        if (currIn == "!!") {
+            if (lastCmd.empty()) {
+#ifdef _WIN32
+                std::cout << '\a';
+#endif
+                std::cout << "No previous command.\n";
+                continue;
+            }
+            currIn = lastCmd;
+            std::cout << currIn << std::endl;
+        } else if (!currIn.empty()) {
+            lastCmd = currIn;
+        }
         if (!LoopUtils::logic(currIn)) {
             break;
         }

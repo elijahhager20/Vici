@@ -236,6 +236,7 @@ void VersionControl::help() {
         "  delver <version>        Delete a specific version from current repo\n"
         "  status                  Show current repo and latest commit\n"
         "  ls                      List files in the current repo's .curr folder\n"
+        "  !!                      Execute the last command again\n"
         "  help                    Show this help message\n"
         "  exit                    Exit the program\n";
 }
