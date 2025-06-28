@@ -46,19 +46,24 @@ void LoopUtils::Loop(){
 bool LoopUtils::logic(std::string& in){
     auto& currentRepo = getCurrentRepo();
     auto args = splitArgs(in);
-    if (args.empty()) return true;
+    if (args.empty()) {
+#ifdef _WIN32
+        std::cout << '\a';
+#endif
+        return true;
+    }
 
     if (args[0] == "exit") return false;
-    if (args[0] == "cr") return VersionControl::selectRepo(args, currentRepo);
-    if (args[0] == "new") return VersionControl::createRepo(args);
-    if (args[0] == "commit") return VersionControl::commitRepo(args, currentRepo, in);
-    if (args[0] == "log") return VersionControl::logRepo(currentRepo);
-    if (args[0] == "checkout") return VersionControl::checkoutRepo(args, currentRepo);
-    if (args[0] == "delrepo") return VersionControl::deleteRepoCmd(args, currentRepo);
-    if (args[0] == "delver") return VersionControl::deleteVersionCmd(args, currentRepo);
-    if (args[0] == "status") return VersionControl::statusRepo(currentRepo);
-    if (args[0] == "help"){VersionControl::help(); return true;}
-    if (args[0] == "ls") return VersionControl::listFiles(currentRepo);
+    if (args[0] == "cr") { VersionControl::selectRepo(args, currentRepo); return true; }
+    if (args[0] == "new") { VersionControl::createRepo(args); return true; }
+    if (args[0] == "commit") { VersionControl::commitRepo(args, currentRepo, in); return true; }
+    if (args[0] == "log") { VersionControl::logRepo(currentRepo); return true; }
+    if (args[0] == "checkout") { VersionControl::checkoutRepo(args, currentRepo); return true; }
+    if (args[0] == "delrepo") { VersionControl::deleteRepoCmd(args, currentRepo); return true; }
+    if (args[0] == "delver") { VersionControl::deleteVersionCmd(args, currentRepo); return true; }
+    if (args[0] == "status") { VersionControl::statusRepo(currentRepo); return true; }
+    if (args[0] == "help"){ VersionControl::help(); return true; }
+    if (args[0] == "ls") { VersionControl::listFiles(currentRepo); return true; }
     if (args[0] == "cls"){
 #ifdef _WIN32
         system("cls");
@@ -67,6 +72,9 @@ bool LoopUtils::logic(std::string& in){
 #endif
         return true;
     }
+#ifdef _WIN32
+    std::cout << '\a';
+#endif
     std::cout << "Unknown command: " << args[0] << "\n";
     return true;
 }
