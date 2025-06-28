@@ -237,6 +237,7 @@ void VersionControl::help() {
         "  status                  Show current repo and latest commit\n"
         "  ls                      List files in the current repo's .curr folder\n"
         "  !!                      Execute the last command again\n"
+        "  cls                     Clear the screen"
         "  help                    Show this help message\n"
         "  exit                    Exit the program\n";
 }

@@ -47,8 +47,10 @@ Oh, and the help command will show you all the commands, but here they are anywa
 | `delver <version>`           | Delete a specific version from current repo        |
 | `status`                     | Show current repo and latest commit                |
 | `ls`                         | List files in the current repo's `.curr` folder    |
+| `!!`                         | Execute the last command again                     |
 | `help`                       | Show this help message                             |
 | `exit`                       | Exit the program                                   |
+| `cls`                        | Clear the screen                                   |
 
 ---
 
