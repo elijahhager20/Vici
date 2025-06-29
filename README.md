@@ -20,8 +20,6 @@ I like the filesystem and fstream headers. And it was good practice for Object O
 
 ## Use
 
-You must add the folder containing `viciw.exe` and `vici.bat` to your `PATH`/`$PATH` (depending on your platform).
-
 You'll probably get errors if you delete any files or folders, so probably don't touch those.
 
 As of now, there are no built-in ways of adding, removing, or editing files. So I guess you'll have to just do it on your own. ¯\\_(ツ)_/¯
