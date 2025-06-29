@@ -40,9 +40,9 @@ void LoopUtils::Loop(){
         std::getline(std::cin, currIn);
         if (currIn == "!!") {
             if (lastCmd.empty()) {
-#ifdef _WIN32
-                std::cout << '\a';
-#endif
+                #ifdef _WIN32
+                    std::cout << '\a';
+                #endif
                 std::cout << "No previous command.\n";
                 continue;
             }
@@ -61,9 +61,9 @@ bool LoopUtils::logic(std::string& in){
     auto& currentRepo = getCurrentRepo();
     auto args = splitArgs(in);
     if (args.empty()) {
-#ifdef _WIN32
-        std::cout << '\a';
-#endif
+        #ifdef _WIN32
+            std::cout << '\a';
+        #endif
         return true;
     }
 
@@ -79,16 +79,16 @@ bool LoopUtils::logic(std::string& in){
     if (args[0] == "help"){ VersionControl::help(); return true; }
     if (args[0] == "ls") { VersionControl::listFiles(currentRepo); return true; }
     if (args[0] == "cls"){
-#ifdef _WIN32
-        system("cls");
-#else
-        system("clear");
-#endif
-        return true;
+        #ifdef _WIN32
+            system("cls");
+        #else
+            system("clear");
+        #endif
+            return true;
     }
-#ifdef _WIN32
-    std::cout << '\a';
-#endif
-    std::cout << "Unknown command: " << args[0] << "\n";
+    #ifdef _WIN32
+        std::cout << '\a';
+    #endif
+        std::cout << "Unknown command: " << args[0] << "\n";
     return true;
 }
