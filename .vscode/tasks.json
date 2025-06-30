@@ -10,7 +10,6 @@
                 "-static",
                 "-fdiagnostics-color=always",
                 "main.cpp",
-                "init.cpp",
                 "utils.cpp",
                 "ver_ctrl.cpp",
                 "-o",
@@ -32,4 +31,4 @@
 }
 
 // Linux command:
-// g++ -std=c++23 -static -fdiagnostics-color=always main.cpp init.cpp utils.cpp ver_ctrl.cpp -o ../bin/vici
+// g++ -std=c++23 -static -fdiagnostics-color=always main.cpp utils.cpp ver_ctrl.cpp -o ../bin/vici

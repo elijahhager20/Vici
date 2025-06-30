@@ -62,12 +62,16 @@ bool VersionControl::versionsFolderExists(const std::string& repoName) {
     return std::filesystem::exists(versionsPath) && std::filesystem::is_directory(versionsPath);
 }
 
-bool VersionControl::checkRepoSelected(const std::string& currentRepo) {
+bool VersionControl::checkRepoSelected(std::string& currentRepo) {
+    if (currentRepo.empty()) {
+        std::ifstream in(getBaseDir() / "user_repos" / ".vicicurr");
+        if (in) std::getline(in, currentRepo);
+    }
     if (currentRepo.empty()) {
         #ifdef _WIN32
             std::cout << '\a';
         #endif
-            std::cout << "Error: No repository selected.\n";
+        std::cout << "Error: No repository selected.\n";
         return false;
     }
     return true;
@@ -90,6 +94,7 @@ bool VersionControl::selectRepo(const std::vector<std::string>& args, std::strin
     if (repoExists(repoName)) {
         currentRepo = repoName;
         std::cout << "Switched to repository: " << repoName << "\n";
+        std::ofstream(getBaseDir() / "user_repos" / ".vicicurr") << repoName;
         return true;
     }
     #ifdef _WIN32
@@ -124,13 +129,13 @@ bool VersionControl::createRepo(const std::vector<std::string>& args) {
     } catch (const std::exception& e) {
         #ifdef _WIN32
             std::cout << '\a';
-#       endif
+        #endif
         std::cout << "Error: Failed to create repository: " << e.what() << "\n";
         return false;
     }
 }
 
-bool VersionControl::commitRepo(const std::vector<std::string>& args, const std::string& currentRepo, const std::string& in) {
+bool VersionControl::commitRepo(const std::vector<std::string>& args, std::string& currentRepo, const std::string& in) {
     if (!checkRepoSelected(currentRepo)) return false;
     std::string message;
     if (args.size() > 1) {
@@ -147,7 +152,7 @@ bool VersionControl::commitRepo(const std::vector<std::string>& args, const std:
     return false;
 }
 
-bool VersionControl::logRepo(const std::string& currentRepo) {
+bool VersionControl::logRepo(std::string& currentRepo) {
     if (!checkRepoSelected(currentRepo)) return false;
     auto versions = listVersions(currentRepo);
     if (versions.empty()) {
@@ -167,7 +172,7 @@ bool VersionControl::logRepo(const std::string& currentRepo) {
     return true;
 }
 
-bool VersionControl::checkoutRepo(const std::vector<std::string>& args, const std::string& currentRepo) {
+bool VersionControl::checkoutRepo(const std::vector<std::string>& args, std::string& currentRepo) {
     if (!checkRepoSelected(currentRepo)) return false;
     if (!checkArgsSize(args, 2, "checkout <version>")) return false;
     if (checkout(currentRepo, args[1])) {
@@ -195,7 +200,7 @@ bool VersionControl::deleteRepoCmd(const std::vector<std::string>& args, std::st
     return false;
 }
 
-bool VersionControl::deleteVersionCmd(const std::vector<std::string>& args, const std::string& currentRepo) {
+bool VersionControl::deleteVersionCmd(const std::vector<std::string>& args, std::string& currentRepo) {
     if (!checkRepoSelected(currentRepo)) return false;
     if (!checkArgsSize(args, 2, "delver <version>")) return false;
     if (deleteVersion(currentRepo, args[1])) {
@@ -209,7 +214,7 @@ bool VersionControl::deleteVersionCmd(const std::vector<std::string>& args, cons
     return false;
 }
 
-bool VersionControl::statusRepo(const std::string& currentRepo) {
+bool VersionControl::statusRepo(std::string& currentRepo) {
     if (!checkRepoSelected(currentRepo)) return false;
     std::cout << "Current repo: " << currentRepo << "\n";
     std::string latest = getLatestVersion(currentRepo);
@@ -242,7 +247,7 @@ void VersionControl::help() {
         "  exit                    Exit the program\n";
 }
 
-bool VersionControl::listFiles(const std::string& currentRepo) {
+bool VersionControl::listFiles(std::string& currentRepo) {
     if (!checkRepoSelected(currentRepo)) return false;
     auto repoPath = getRepoPath(currentRepo);
     if (!repoExists(currentRepo)) {
