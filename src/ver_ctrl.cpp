@@ -45,11 +45,11 @@ bool ViciIgnore::isIgnored(const std::vector<IgnoreRule>& rules, const std::file
 }
 
 std::filesystem::path VersionControl::getRepoPath(const std::string& repoName) {
-    return std::filesystem::path("user_repos") / (repoName + ".curr");
+    return getBaseDir() / "user_repos" / (repoName + ".curr");
 }
 
 std::filesystem::path VersionControl::getVersionsPath(const std::string& repoName) {
-    return std::filesystem::path("user_repos") / repoName;
+    return getBaseDir() / "user_repos" / repoName;
 }
 
 bool VersionControl::repoExists(const std::string& repoName) {

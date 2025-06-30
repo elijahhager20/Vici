@@ -5,6 +5,28 @@
 #include "ver_ctrl.hpp"
 #include <cstdlib>
 
+#ifdef _WIN32
+    #include <windows.h>
+#else
+    #include <unistd.h>
+#endif
+
+std::filesystem::path getBaseDir() {
+#ifdef _WIN32
+    wchar_t buffer[MAX_PATH];
+    GetModuleFileNameW(NULL, buffer, MAX_PATH);
+    return std::filesystem::path(buffer).parent_path();
+#else
+    char buffer[4096];
+    ssize_t len = readlink("/proc/self/exe", buffer, sizeof(buffer)-1);
+    if (len != -1) {
+        buffer[len] = '\0';
+        return std::filesystem::path(buffer).parent_path();
+    }
+    return std::filesystem::current_path();
+#endif
+}
+
 std::vector<std::string> splitArgs(const std::string& input) {
     std::istringstream iss(input);
     std::vector<std::string> args;

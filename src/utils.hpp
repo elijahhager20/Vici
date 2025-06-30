@@ -3,6 +3,8 @@
 #include <filesystem>
 #include <vector>
 
+std::filesystem::path getBaseDir();
+
 class InitUtils {
 public:
     static void listDirectoryContents(const std::filesystem::path& path);
