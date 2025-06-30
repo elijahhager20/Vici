@@ -5,8 +5,9 @@
 #include <filesystem>
 
 void Init::mainInit() {
-    if (!std::filesystem::exists("user_repos")) {
-        std::filesystem::create_directory("user_repos");
+    auto userReposPath = getBaseDir() / "user_repos";
+    if (!std::filesystem::exists(userReposPath)) {
+        std::filesystem::create_directory(userReposPath);
     }
     LoopUtils::Loop();
 }
