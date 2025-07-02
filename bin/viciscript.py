@@ -34,6 +34,12 @@ def main():
                 continue
             if cmd.lower() == "exit":
                 break
+            if cmd.lower() == "cls":
+                if os.name == "nt":
+                    os.system("cls")
+                else:
+                    os.system("clear")
+                continue
             args = cmd.split()
             run_vici_command(args)
     except (EOFError, KeyboardInterrupt):
