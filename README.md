@@ -18,7 +18,7 @@ I was bored, and I figured that the best way to spend my time was to create a co
 
 I like the filesystem and fstream headers. And it was good practice for Object Oriented Programming.
 
-## Python (bin/viciscript.py)
+## Python (/bin/viciscript.py)
 
 This Python script allows for basic automation with vici. When ran from this file, the Pyhon script acts as a REPL while C++ acts as the core.
 
