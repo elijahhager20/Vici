@@ -11,7 +11,7 @@ known to man
 #include <fstream>
 
 int main(int argc, char* argv[]) {
-    auto userReposPath = getBaseDir() / "user_repos";
+    auto userReposPath = Utils::getBaseDir() / "user_repos";
     if (!std::filesystem::exists(userReposPath)) {
         std::filesystem::create_directory(userReposPath);
     }
@@ -37,22 +37,22 @@ int main(int argc, char* argv[]) {
         else if (args[0] == "help") VersionControl::help();
         else if (args[0] == "ls") VersionControl::listFiles(currentRepo);
         else if (args[0] == "cls") {
-            #ifdef _WIN32
-                system("cls");
-            #else
-                system("clear");
-            #endif
+#ifdef _WIN32
+            system("cls");
+#else
+            system("clear");
+#endif
         } else {
-            #ifdef _WIN32
-                std::cout << '\a';
-            #endif
+#ifdef _WIN32
+            std::cout << '\a';
+#endif
             std::cout << "Unknown command: " << args[0] << "\n";
             return 1;
         }
         return 0;
     } else {
-        LoopUtils::Loop();
-        std::ofstream(getBaseDir() / "user_repos" / ".vicicurr", std::ios::trunc).close();
+        LoopUtils::loop();
+        std::ofstream(Utils::getBaseDir() / "user_repos" / ".vicicurr", std::ios::trunc).close();
         return 0;
     }
 }

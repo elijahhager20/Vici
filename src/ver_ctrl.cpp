@@ -45,11 +45,11 @@ bool ViciIgnore::isIgnored(const std::vector<IgnoreRule>& rules, const std::file
 }
 
 std::filesystem::path VersionControl::getRepoPath(const std::string& repoName) {
-    return getBaseDir() / "user_repos" / (repoName + ".curr");
+    return Utils::getBaseDir() / "user_repos" / (repoName + ".curr");
 }
 
 std::filesystem::path VersionControl::getVersionsPath(const std::string& repoName) {
-    return getBaseDir() / "user_repos" / repoName;
+    return Utils::getBaseDir() / "user_repos" / repoName;
 }
 
 bool VersionControl::repoExists(const std::string& repoName) {
@@ -64,13 +64,13 @@ bool VersionControl::versionsFolderExists(const std::string& repoName) {
 
 bool VersionControl::checkRepoSelected(std::string& currentRepo) {
     if (currentRepo.empty()) {
-        std::ifstream in(getBaseDir() / "user_repos" / ".vicicurr");
+        std::ifstream in(Utils::getBaseDir() / "user_repos" / ".vicicurr");
         if (in) std::getline(in, currentRepo);
     }
     if (currentRepo.empty()) {
-        #ifdef _WIN32
-            std::cout << '\a';
-        #endif
+#ifdef _WIN32
+        std::cout << '\a';
+#endif
         std::cout << "Error: No repository selected.\n";
         return false;
     }
@@ -79,9 +79,9 @@ bool VersionControl::checkRepoSelected(std::string& currentRepo) {
 
 bool VersionControl::checkArgsSize(const std::vector<std::string>& args, size_t minSize, const std::string& usage) {
     if (args.size() < minSize) {
-        #ifdef _WIN32
-            std::cout << '\a';
-        #endif
+#ifdef _WIN32
+        std::cout << '\a';
+#endif
         std::cout << "Error: Usage: " << usage << "\n";
         return false;
     }
@@ -94,12 +94,12 @@ bool VersionControl::selectRepo(const std::vector<std::string>& args, std::strin
     if (repoExists(repoName)) {
         currentRepo = repoName;
         std::cout << "Switched to repository: " << repoName << "\n";
-        std::ofstream(getBaseDir() / "user_repos" / ".vicicurr") << repoName;
+        std::ofstream(Utils::getBaseDir() / "user_repos" / ".vicicurr") << repoName;
         return true;
     }
-    #ifdef _WIN32
-        std::cout << '\a';
-    #endif
+#ifdef _WIN32
+    std::cout << '\a';
+#endif
     std::cout << "Error: Repository '" << repoName << "' does not exist.\n";
     currentRepo.clear();
     return false;
@@ -111,9 +111,9 @@ bool VersionControl::createRepo(const std::vector<std::string>& args) {
     auto repoPath = getRepoPath(repoName);
     auto versionsPath = getVersionsPath(repoName);
     if (repoExists(repoName)) {
-        #ifdef _WIN32
-            std::cout << '\a';
-        #endif
+#ifdef _WIN32
+        std::cout << '\a';
+#endif
         std::cout << "Error: Repository '" << repoName << "' already exists.\n";
         return false;
     }
@@ -127,9 +127,9 @@ bool VersionControl::createRepo(const std::vector<std::string>& args) {
         std::cout << "Versions folder '" << versionsPath.string() << "' created successfully.\n";
         return true;
     } catch (const std::exception& e) {
-        #ifdef _WIN32
-            std::cout << '\a';
-        #endif
+#ifdef _WIN32
+        std::cout << '\a';
+#endif
         std::cout << "Error: Failed to create repository: " << e.what() << "\n";
         return false;
     }
@@ -145,9 +145,9 @@ bool VersionControl::commitRepo(const std::vector<std::string>& args, std::strin
         std::cout << "Committed current state of '" << currentRepo << "'.\n";
         return true;
     }
-    #ifdef _WIN32
-        std::cout << '\a';
-    #endif
+#ifdef _WIN32
+    std::cout << '\a';
+#endif
     std::cout << "Error: Commit failed.\n";
     return false;
 }
@@ -156,9 +156,9 @@ bool VersionControl::logRepo(std::string& currentRepo) {
     if (!checkRepoSelected(currentRepo)) return false;
     auto versions = listVersions(currentRepo);
     if (versions.empty()) {
-        #ifdef _WIN32
-            std::cout << '\a';
-        #endif
+#ifdef _WIN32
+        std::cout << '\a';
+#endif
         std::cout << "No commits found.\n";
         return false;
     }
@@ -179,9 +179,9 @@ bool VersionControl::checkoutRepo(const std::vector<std::string>& args, std::str
         std::cout << "Checked out version " << args[1] << " to '" << currentRepo << ".curr'.\n";
         return true;
     }
-    #ifdef _WIN32
-        std::cout << '\a';
-    #endif
+#ifdef _WIN32
+    std::cout << '\a';
+#endif
     std::cout << "Error: Checkout failed.\n";
     return false;
 }
@@ -193,9 +193,9 @@ bool VersionControl::deleteRepoCmd(const std::vector<std::string>& args, std::st
         if (currentRepo == args[1]) currentRepo.clear();
         return true;
     }
-    #ifdef _WIN32
-        std::cout << '\a';
-    #endif
+#ifdef _WIN32
+    std::cout << '\a';
+#endif
     std::cout << "Error: Failed to delete repository.\n";
     return false;
 }
@@ -207,9 +207,9 @@ bool VersionControl::deleteVersionCmd(const std::vector<std::string>& args, std:
         std::cout << "Version '" << args[1] << "' deleted.\n";
         return true;
     }
-    #ifdef _WIN32
-        std::cout << '\a';
-    #endif
+#ifdef _WIN32
+    std::cout << '\a';
+#endif
     std::cout << "Error: Failed to delete version.\n";
     return false;
 }
@@ -221,9 +221,9 @@ bool VersionControl::statusRepo(std::string& currentRepo) {
     if (!latest.empty()) {
         std::cout << "Latest commit: " << latest << "\n";
     } else {
-    #ifdef _WIN32
+#ifdef _WIN32
         std::cout << '\a';
-    #endif
+#endif
         std::cout << "No commits yet.\n";
     }
     return true;
@@ -251,9 +251,9 @@ bool VersionControl::listFiles(std::string& currentRepo) {
     if (!checkRepoSelected(currentRepo)) return false;
     auto repoPath = getRepoPath(currentRepo);
     if (!repoExists(currentRepo)) {
-        #ifdef _WIN32
-            std::cout << '\a';
-        #endif
+#ifdef _WIN32
+        std::cout << '\a';
+#endif
         std::cout << "Error: Current repo folder does not exist.\n";
         return false;
     }
@@ -285,11 +285,11 @@ bool VersionControl::commit(const std::string& repoName, const std::string& mess
         auto now = std::chrono::system_clock::now();
         std::time_t now_c = std::chrono::system_clock::to_time_t(now);
         std::tm tm;
-        #ifdef _WIN32
-            localtime_s(&tm, &now_c);
-        #else
-            localtime_r(&now_c, &tm);
-        #endif
+#ifdef _WIN32
+        localtime_s(&tm, &now_c);
+#else
+        localtime_r(&now_c, &tm);
+#endif
         std::ostringstream oss;
         oss << std::put_time(&tm, "v_%Y%m%d_%H%M%S");
         std::string versionFolder = oss.str();
@@ -299,9 +299,9 @@ bool VersionControl::commit(const std::string& repoName, const std::string& mess
         std::filesystem::path newVersionPath = versionsPath / versionFolder;
 
         if (!std::filesystem::exists(repoPath)) {
-            #ifdef _WIN32
-                std::cout << '\a';
-            #endif
+#ifdef _WIN32
+            std::cout << '\a';
+#endif
             return false;
         }
         auto ignoreRules = ViciIgnore::parse(repoPath);
@@ -314,9 +314,9 @@ bool VersionControl::commit(const std::string& repoName, const std::string& mess
         }
         return true;
     } catch (...) {
-        #ifdef _WIN32
-            std::cout << '\a';
-        #endif
+#ifdef _WIN32
+        std::cout << '\a';
+#endif
         return false;
     }
 }
@@ -342,9 +342,9 @@ bool VersionControl::checkout(const std::string& repoName, const std::string& ve
         std::filesystem::path versionPath = versionsPath / version;
 
         if (!std::filesystem::exists(versionPath)) {
-            #ifdef _WIN32
-                std::cout << '\a';
-            #endif
+#ifdef _WIN32
+            std::cout << '\a';
+#endif
             return false;
         }
 
@@ -352,9 +352,9 @@ bool VersionControl::checkout(const std::string& repoName, const std::string& ve
         copyDirectory(versionPath, repoPath, ignoreRules);
         return true;
     } catch (...) {
-        #ifdef _WIN32
-            std::cout << '\a';
-        #endif
+#ifdef _WIN32
+        std::cout << '\a';
+#endif
         return false;
     }
 }
@@ -367,9 +367,9 @@ bool VersionControl::deleteRepo(const std::string& repoName) {
         std::filesystem::remove_all(versionsPath);
         return true;
     } catch (...) {
-        #ifdef _WIN32
-            std::cout << '\a';
-        #endif
+#ifdef _WIN32
+        std::cout << '\a';
+#endif
         return false;
     }
 }
@@ -380,9 +380,9 @@ bool VersionControl::deleteVersion(const std::string& repoName, const std::strin
         std::filesystem::remove_all(versionPath);
         return true;
     } catch (...) {
-        #ifdef _WIN32
-            std::cout << '\a';
-        #endif
+#ifdef _WIN32
+        std::cout << '\a';
+#endif
         return false;
     }
 }
@@ -392,9 +392,9 @@ std::string VersionControl::getLatestVersion(const std::string& repoName) {
     if (!versions.empty()) {
         return versions.front();
     }
-    #ifdef _WIN32
-        std::cout << '\a';
-    #endif
+#ifdef _WIN32
+    std::cout << '\a';
+#endif
     return {};
 }
 
@@ -406,14 +406,14 @@ std::string VersionControl::getCommitMessage(const std::string& repoName, const 
             std::ifstream file(msgFile);
             std::getline(file, message);
         } else {
-            #ifdef _WIN32
-                std::cout << '\a';
-            #endif
+#ifdef _WIN32
+            std::cout << '\a';
+#endif
         }
     } catch (...) {
-        #ifdef _WIN32
-            std::cout << '\a';
-        #endif
+#ifdef _WIN32
+        std::cout << '\a';
+#endif
     }
     return message;
 }

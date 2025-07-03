@@ -6,12 +6,12 @@
 #include <cstdlib>
 
 #ifdef _WIN32
-    #include <windows.h>
+#include <windows.h>
 #else
-    #include <unistd.h>
+#include <unistd.h>
 #endif
 
-std::filesystem::path getBaseDir() {
+std::filesystem::path Utils::getBaseDir() {
 #ifdef _WIN32
     wchar_t buffer[MAX_PATH];
     GetModuleFileNameW(NULL, buffer, MAX_PATH);
@@ -27,7 +27,7 @@ std::filesystem::path getBaseDir() {
 #endif
 }
 
-std::vector<std::string> splitArgs(const std::string& input) {
+std::vector<std::string> Utils::splitArgs(const std::string& input) {
     std::istringstream iss(input);
     std::vector<std::string> args;
     std::string arg;
@@ -37,7 +37,7 @@ std::vector<std::string> splitArgs(const std::string& input) {
     return args;
 }
 
-void InitUtils::listDirectoryContents(const std::filesystem::path& path){
+void InitUtils::listDirectoryContents(const std::filesystem::path& path) {
     for (const auto& entry : std::filesystem::directory_iterator(path)) {
         const auto& name = entry.path().filename().string();
         if (name != "." && name != "..") {
@@ -54,17 +54,17 @@ std::string& LoopUtils::getCurrentRepo() {
     return currentRepo;
 }
 
-void LoopUtils::Loop(){
+void LoopUtils::loop() {
     std::string currIn;
     std::string lastCmd;
-    while(true){
+    while (true) {
         std::cout << '@' << currentRepo << ": ";
         std::getline(std::cin, currIn);
         if (currIn == "!!") {
             if (lastCmd.empty()) {
-                #ifdef _WIN32
-                    std::cout << '\a';
-                #endif
+#ifdef _WIN32
+                std::cout << '\a';
+#endif
                 std::cout << "No previous command.\n";
                 continue;
             }
@@ -79,13 +79,13 @@ void LoopUtils::Loop(){
     }
 }
 
-bool LoopUtils::logic(std::string& in){
+bool LoopUtils::logic(std::string& in) {
     auto& currentRepo = getCurrentRepo();
-    auto args = splitArgs(in);
+    auto args = Utils::splitArgs(in);
     if (args.empty()) {
-        #ifdef _WIN32
-            std::cout << '\a';
-        #endif
+#ifdef _WIN32
+        std::cout << '\a';
+#endif
         return true;
     }
 
@@ -98,19 +98,19 @@ bool LoopUtils::logic(std::string& in){
     if (args[0] == "delrepo") { VersionControl::deleteRepoCmd(args, currentRepo); return true; }
     if (args[0] == "delver") { VersionControl::deleteVersionCmd(args, currentRepo); return true; }
     if (args[0] == "status") { VersionControl::statusRepo(currentRepo); return true; }
-    if (args[0] == "help"){ VersionControl::help(); return true; }
+    if (args[0] == "help") { VersionControl::help(); return true; }
     if (args[0] == "ls") { VersionControl::listFiles(currentRepo); return true; }
-    if (args[0] == "cls"){
-        #ifdef _WIN32
-            system("cls");
-        #else
-            system("clear");
-        #endif
-            return true;
+    if (args[0] == "cls") {
+#ifdef _WIN32
+        system("cls");
+#else
+        system("clear");
+#endif
+        return true;
     }
-    #ifdef _WIN32
-        std::cout << '\a';
-    #endif
-        std::cout << "Unknown command: " << args[0] << "\n";
+#ifdef _WIN32
+    std::cout << '\a';
+#endif
+    std::cout << "Unknown command: " << args[0] << "\n";
     return true;
 }

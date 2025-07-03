@@ -56,6 +56,8 @@
         "sstream": "cpp",
         "filesystem": "cpp",
         "chrono": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "cstdarg": "cpp",
+        "ranges": "cpp"
     }
 }

@@ -3,7 +3,11 @@
 #include <filesystem>
 #include <vector>
 
-std::filesystem::path getBaseDir();
+class Utils {
+public:
+    static std::filesystem::path getBaseDir();
+    static std::vector<std::string> splitArgs(const std::string& input);
+};
 
 class InitUtils {
 public:
@@ -12,9 +16,7 @@ public:
 
 class LoopUtils {
 public:
-    static void Loop();
+    static void loop();
     static bool logic(std::string& in);
     static std::string& getCurrentRepo();
 };
-
-std::vector<std::string> splitArgs(const std::string& input);
